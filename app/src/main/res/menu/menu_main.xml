@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.timreynolds.imagesearch.search.SearchActivity">
+    <item
+        android:id="@+id/action_gallery"
+        android:icon="@drawable/ic_photo_library_24dp"
+        android:title="@string/gallery"
+        app:showAsAction="always"/>
+</menu>

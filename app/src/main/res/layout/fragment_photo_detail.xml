@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context="org.timreynolds.imagesearch.photodetail.PhotoDetailFragment"
+    tools:showIn="@layout/activity_photo_detail">
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/image_detail_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:foregroundGravity="center_horizontal"
+            android:layout_margin="@dimen/card_margin_horizontal"
+
+            card_view:cardUseCompatPadding="true"
+            card_view:contentPadding="10dp"
+            card_view:cardBackgroundColor="@color/cardViewBackground"
+            card_view:cardElevation="8dp"
+            card_view:cardMaxElevation="12dp"
+            card_view:cardCornerRadius="4dp">
+
+                <LinearLayout
+                    android:id="@+id/metadata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:gravity="start"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:id="@+id/ownerHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="@string/owner_id"
+
+                            android:textStyle="bold"
+                            android:padding="2dp" />
+
+                        <TextView
+                            android:id="@+id/ownerId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:padding="2dp"
+                            android:layout_toEndOf="@id/ownerHeader"/>
+
+                        <TextView
+                            android:id="@+id/titleHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:text="@string/title"
+                            android:textStyle="bold"
+                            android:padding="2dp" />
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:padding="2dp"
+                            android:layout_toEndOf="@id/titleHeader"/>
+
+                        <ImageView
+                            android:id="@+id/photo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitCenter"
+                            android:layout_below="@id/title"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+</android.support.constraint.ConstraintLayout>
