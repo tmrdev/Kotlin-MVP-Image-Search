@@ -4,6 +4,7 @@
     <string name="gallery_fragment">Gallery</string>
     <string name="title_activity_photo_detail">Photo Detail</string>
     <string name="loading_photos_error">Error while loading photos</string>
+    <string name="network_error">Error: Check Network Connectivity</string>
     <string name="owner_id">Owner ID:</string>
     <string name="title">Title:</string>
     <string name="hint_search_image_tags">Search for image tags</string>

@@ -6,8 +6,10 @@ import android.view.*
 import kotlinx.android.synthetic.main.fragment_photo_detail.*
 import org.timreynolds.imagesearch.R
 import org.timreynolds.imagesearch.data.db.Gallery
+import org.timreynolds.imagesearch.util.NetworkUtils
 import org.timreynolds.imagesearch.util.inflate
 import org.timreynolds.imagesearch.util.loadImage
+import org.timreynolds.imagesearch.util.toast
 
 class PhotoDetailFragment : Fragment(), PhotoDetailContract.View {
 
@@ -29,6 +31,11 @@ class PhotoDetailFragment : Fragment(), PhotoDetailContract.View {
         //view?.setBackgroundColor(resources.getColor(R.color.colorAccent))
 
         return container?.inflate(R.layout.fragment_photo_detail)
+    }
+
+    override fun onError(resId: Int) {
+        val message = getString(resId)
+        context.toast(message)
     }
 
     override fun onResume() {
@@ -58,9 +65,13 @@ class PhotoDetailFragment : Fragment(), PhotoDetailContract.View {
 
         with(metadata) {
             visibility = View.VISIBLE
-            ownerId.text = photoData.owner.toString()
+            ownerId.text = photoData.owner
             title.text = photoData.title.trim()
         }
+    }
+
+    override fun isNetworkConnected(): Boolean {
+        return NetworkUtils.isNetworkConnected(context)
     }
 
     override fun isActive(): Boolean = isAdded

@@ -15,15 +15,11 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.timreynolds.imagesearch.R
 import org.timreynolds.imagesearch.data.db.Gallery
-import org.timreynolds.imagesearch.data.models.SearchResults
 import org.timreynolds.imagesearch.gallery.adapter.GalleryAdapter
 import org.timreynolds.imagesearch.gallery.adapter.PhotoDelegateAdapter
 import org.timreynolds.imagesearch.photodetail.INTENT_PHOTO
 import org.timreynolds.imagesearch.photodetail.PhotoDetailActivity
-import org.timreynolds.imagesearch.util.TAG
-import org.timreynolds.imagesearch.util.inflate
-import org.timreynolds.imagesearch.util.launchActivity
-import org.timreynolds.imagesearch.util.toast
+import org.timreynolds.imagesearch.util.*
 
 /**
  * GalleryFragment
@@ -67,14 +63,19 @@ class GalleryFragment : Fragment(), GalleryContract.View, PhotoDelegateAdapter.o
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setRetainInstance(true);
+        setRetainInstance(true)
+    }
+
+    override fun onError(resId: Int) {
+        val message = getString(resId)
+        context.toast(message)
     }
 
     override fun onSaveInstanceState(state: Bundle?) {
         Log.i(TAG, "** onSaveInstanceState hit **")
         // Save list state
-        listState = photos_list.layoutManager.onSaveInstanceState();
-        state?.putParcelable(LIST_STATE_KEY, listState);
+        listState = photos_list.layoutManager.onSaveInstanceState()
+        state?.putParcelable(LIST_STATE_KEY, listState)
         super.onSaveInstanceState(state)
     }
 
@@ -117,13 +118,14 @@ class GalleryFragment : Fragment(), GalleryContract.View, PhotoDelegateAdapter.o
 
     private fun saveSelectedIdsToPrefs(results: List<Gallery>) {
         val sharedPreference =  context.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
-        var editor = sharedPreference.edit()
+        val editor = sharedPreference.edit()
         val set = HashSet<String>()
         for(item in results) {
             set.add(item.flickrId.toString())
         }
         editor.putStringSet("savedIds", set)
-        editor.commit()
+        // NOTE: using apply instead of commit, as apply performs task in background
+        editor.apply()
 
     }
 
@@ -135,6 +137,10 @@ class GalleryFragment : Fragment(), GalleryContract.View, PhotoDelegateAdapter.o
             Log.i(TAG, "** onResume hit ** listState ? -> " + listState.toString())
             photos_list.layoutManager.onRestoreInstanceState(listState)
         }
+    }
+
+    override fun isNetworkConnected(): Boolean {
+        return NetworkUtils.isNetworkConnected(context)
     }
 
     override fun onPause() {

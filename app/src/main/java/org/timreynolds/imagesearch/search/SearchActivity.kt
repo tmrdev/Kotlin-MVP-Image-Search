@@ -25,9 +25,9 @@ import org.timreynolds.imagesearch.data.models.SearchResults
 import org.timreynolds.imagesearch.data.source.remote.api.FLICKR_API_KEY
 import org.timreynolds.imagesearch.gallery.GalleryActivity
 import org.timreynolds.imagesearch.gallery.SearchContract
-import org.timreynolds.imagesearch.gallery.SearchPresenter
 import org.timreynolds.imagesearch.gallery.adapter.SearchAdapter
 import org.timreynolds.imagesearch.search.adapter.SearchAdapterInterface
+import org.timreynolds.imagesearch.util.NetworkUtils
 import org.timreynolds.imagesearch.util.TAG
 import org.timreynolds.imagesearch.util.logdebug
 import org.timreynolds.imagesearch.util.toast
@@ -58,10 +58,10 @@ class SearchActivity : AppCompatActivity(), SearchAdapterInterface, SearchContra
         setSupportActionBar(toolbarSearch)
 
         // Stetho for testing sql db
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this)
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        var tagString: String?
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        val tagString: String?
         logdebug("** onCreate hit **")
         if(savedInstanceState != null) {
             tagString = savedInstanceState.getString(SEARCH_TAG_KEY)
@@ -79,7 +79,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapterInterface, SearchContra
         searchRecyclerView.layoutManager = LinearLayoutManager(this)
         searchRecyclerView.apply {
             setHasFixedSize(true)
-            addItemDecoration(SimpleDividerItemDecoration(applicationContext!!));
+            addItemDecoration(SimpleDividerItemDecoration(applicationContext!!))
             // TODO: Can easily switch between Grid and Layout with declarations below
             // layoutManager = GridLayoutManager(context, 2)
 
@@ -91,6 +91,11 @@ class SearchActivity : AppCompatActivity(), SearchAdapterInterface, SearchContra
         myAdapter = SearchAdapter(this, this)
         searchRecyclerView.adapter = myAdapter
 
+    }
+
+    override fun onError(resId: Int) {
+        val message = getString(resId)
+        this.toast(message)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -126,10 +131,10 @@ class SearchActivity : AppCompatActivity(), SearchAdapterInterface, SearchContra
     override fun onSaveInstanceState(state: Bundle?) {
         Log.i("onsaveinstance", "** on save instance **")
         // Save list state
-        listState = searchRecyclerView.layoutManager.onSaveInstanceState();
-        state?.putParcelable(LIST_STATE_KEY, listState);
+        listState = searchRecyclerView.layoutManager.onSaveInstanceState()
+        state?.putParcelable(LIST_STATE_KEY, listState)
         searchTagState = searchView.query.toString()
-        state?.putString(SEARCH_TAG_KEY, searchTagState);
+        state?.putString(SEARCH_TAG_KEY, searchTagState)
         super.onSaveInstanceState(state)
     }
 
@@ -151,13 +156,17 @@ class SearchActivity : AppCompatActivity(), SearchAdapterInterface, SearchContra
         searchPresenter?.unsubscribe()
     }
 
+    override fun isNetworkConnected(): Boolean {
+        return NetworkUtils.isNetworkConnected(this)
+    }
+
     /*
      * searchAction - interface between Search Adapter and Search Activity for incrementing selected images (display) and
      * passing selected images to GalleryActivity
      */
     override fun searchAction(size: Int, actionType: String, selectedImagesList: ArrayList<SearchResults.FlickrPhoto>?) {
         if(actionType == "increment") {
-            var imageTitle: String = "Image"
+            var imageTitle = "Image"
             if (actionMode == null) actionMode = startActionMode(ActionModeCallback())
             if (size > 1) imageTitle = "Images"
             if (size > 0) actionMode?.setTitle("Add $size $imageTitle To Gallery")
@@ -264,7 +273,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapterInterface, SearchContra
 
         init {
             // mDivider = context.getResources().getDrawable(R.drawable.line_divider)
-            mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
+            mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider)
         }
 
         override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {

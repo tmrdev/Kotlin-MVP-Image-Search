@@ -1,14 +1,16 @@
-package org.timreynolds.imagesearch.gallery
+package org.timreynolds.imagesearch.search
 
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.timreynolds.imagesearch.MyApplication
+import org.timreynolds.imagesearch.R
 import org.timreynolds.imagesearch.data.db.Gallery
 import org.timreynolds.imagesearch.data.models.SearchResults
 import org.timreynolds.imagesearch.data.source.PhotosRepository
 import org.timreynolds.imagesearch.data.source.remote.api.FLICKR_API_KEY
+import org.timreynolds.imagesearch.gallery.SearchContract
 import org.timreynolds.imagesearch.util.TAG
 import org.timreynolds.imagesearch.util.schedulers.BaseSchedulerProvider
 
@@ -45,27 +47,31 @@ class SearchPresenter : SearchContract.Presenter {
     override fun loadFlickrPhotos(tagValue: String, apiKey: String) {
         this.tagValue = tagValue
         Log.i("gallery-presenter", " ** load Flickr Photos top hit **")
-        if(this.tagValue.length > 0) {
-            disposable.clear()
-            val subscription = photosRepository
-                    .getFlickrPhotos(tagValue, apiKey)
-                    .subscribeOn(scheduler.computation())
-                    .observeOn(scheduler.ui())
-                    .cache()
-                    .doOnError {
-                        Log.i(TAG, " error: loadFlickrPhotos -> " + it.message + " : " +  it.localizedMessage + " : " + it.cause)
-                    }
-                    .subscribe(
-                            this::processFlickrPhotos
-                    )
-                    {
-                        Log.i(TAG, "rxjava process error -> " + it.localizedMessage + " : " + it.message)
-                        this.processError()
+        if(photosView.isNetworkConnected()) {
+            if (this.tagValue.length > 0) {
+                disposable.clear()
+                val subscription = photosRepository
+                        .getFlickrPhotos(tagValue, apiKey)
+                        .subscribeOn(scheduler.computation())
+                        .observeOn(scheduler.ui())
+                        .cache()
+                        .doOnError {
+                            Log.i(TAG, " error: loadFlickrPhotos -> " + it.message + " : " + it.localizedMessage + " : " + it.cause)
+                        }
+                        .subscribe(
+                                this::processFlickrPhotos
+                        )
+                        {
+                            Log.i(TAG, "rxjava process error -> " + it.localizedMessage + " : " + it.message)
+                            this.processError()
 
-                    }
-            disposable.add(subscription)
+                        }
+                disposable.add(subscription)
+            } else {
+                Log.i(TAG, "** error: tagValue is NULL")
+            }
         } else {
-            Log.i(TAG, "** error: tagValue is NULL")
+            photosView.onError(R.string.network_error)
         }
     }
 
