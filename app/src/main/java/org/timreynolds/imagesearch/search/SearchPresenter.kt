@@ -6,13 +6,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.timreynolds.imagesearch.MyApplication
 import org.timreynolds.imagesearch.data.db.Gallery
-import org.timreynolds.imagesearch.data.db.GalleryDatabase
-
 import org.timreynolds.imagesearch.data.models.SearchResults
 import org.timreynolds.imagesearch.data.source.PhotosRepository
 import org.timreynolds.imagesearch.data.source.remote.api.FLICKR_API_KEY
 import org.timreynolds.imagesearch.util.TAG
-import org.timreynolds.imagesearch.util.logdebug
 import org.timreynolds.imagesearch.util.schedulers.BaseSchedulerProvider
 
 class SearchPresenter : SearchContract.Presenter {

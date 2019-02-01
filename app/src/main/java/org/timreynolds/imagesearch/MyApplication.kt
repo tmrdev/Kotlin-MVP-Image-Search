@@ -1,7 +1,9 @@
 package org.timreynolds.imagesearch
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import com.jakewharton.picasso.OkHttp3Downloader
+import com.squareup.picasso.Picasso
+import okhttp3.OkHttpClient
 import org.timreynolds.imagesearch.data.db.GalleryDatabase
 
 /**
@@ -19,6 +21,13 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         db = GalleryDatabase.getInstance(this)!!
+
+        // Picasso Network Offline Priority
+        var okHttpClient = OkHttpClient.Builder()
+                .build()
+        Picasso.Builder(this)
+                .downloader(OkHttp3Downloader(okHttpClient))
+                .build()
     }
 
 }

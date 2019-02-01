@@ -3,6 +3,7 @@ package org.timreynolds.imagesearch.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +13,9 @@ import android.view.ViewGroup
 import android.widget.Adapter
 import android.widget.ImageView
 import android.widget.Toast
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import org.timreynolds.imagesearch.BuildConfig
 import org.timreynolds.imagesearch.R
 
 
@@ -20,11 +23,25 @@ fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
 }
 
-fun ImageView.loadImage(imageUrl: String?) {
-    Picasso.get().load(imageUrl)
-            .placeholder(R.drawable.ic_image_black_placeholder)
-            .error(R.drawable.ic_broken_image_black)
-            .into(this)
+val Context.connectivityManager: ConnectivityManager?
+    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+
+fun ImageView.loadImage(imageUrl: String?, loadOffline: Boolean) {
+    Log.i(TAG, "** picasso load **")
+    if(loadOffline) {
+        Picasso.get().load(imageUrl)
+                .placeholder(R.drawable.ic_image_black_placeholder)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .error(R.drawable.ic_broken_image_black)
+                .into(this)
+    } else {
+        // No Cache, must have internet access can  be used
+        // .networkPolicy(NetworkPolicy.NO_CACHE)
+        Picasso.get().load(imageUrl)
+                .placeholder(R.drawable.ic_image_black_placeholder)
+                .error(R.drawable.ic_broken_image_black)
+                .into(this)
+    }
 }
 
 inline fun <reified T : Any> Context.launchActivity(

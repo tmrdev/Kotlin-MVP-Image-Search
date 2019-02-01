@@ -91,7 +91,7 @@ class SearchAdapter(val context: Context, val searchAdapterInterface: SearchAdap
         // Create static url  and center crop larger image
         staticUrl = "https://farm" + searchList[position].farm + ".staticflickr.com/"+
                 searchList[position].server + "/" + searchList[position].id + "_" + searchList[position].secret + ".jpg"
-        holder?.imageView?.loadImage(staticUrl)
+        holder?.imageView?.loadImage(staticUrl, false)
 
         if (selectedIds.contains(id)) {
             //if item is selected then,set foreground color of FrameLayout.

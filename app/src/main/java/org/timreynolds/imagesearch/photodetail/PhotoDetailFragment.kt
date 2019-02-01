@@ -51,7 +51,7 @@ class PhotoDetailFragment : Fragment(), PhotoDetailContract.View {
 
     override fun showPhoto(url: String) {
         photo.visibility = View.VISIBLE
-        photo.loadImage(url)
+        photo.loadImage(url, true)
     }
 
     override fun showMetadata(photoData: Gallery) {

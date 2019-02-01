@@ -34,7 +34,7 @@ class PhotoDelegateAdapter(val viewActions: onViewSelectedListener) {
             staticUrl = "https://farm" + item.farm + ".staticflickr.com/"+
                     item.server + "/" + item.flickrId + "_" + item.secret + ".jpg"
             Log.i(TAG, "** bind gallery image url ??? ->" + staticUrl)
-            photo.loadImage(staticUrl)
+            photo.loadImage(staticUrl, false)
             super.itemView.setOnClickListener { viewActions.onItemSelected(item) }
         }
     }
